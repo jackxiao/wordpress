@@ -14,7 +14,12 @@
  *
  * @return string The HTTP protocol. Default: HTTP/1.0.
  */
+
 function wp_get_server_protocol() {
+	/**
+      in_array(search,array,type) 函数搜索数组中是否存在指定的值,如果给定的值 search 存在于数组 array 中则返回 true,如果没有在数组中找到参数，函数返回 false。
+
+	*/
 	$protocol = $_SERVER['SERVER_PROTOCOL'];
 	if ( ! in_array( $protocol, array( 'HTTP/1.1', 'HTTP/2', 'HTTP/2.0' ) ) ) {
 		$protocol = 'HTTP/1.0';
@@ -29,15 +34,42 @@ function wp_get_server_protocol() {
  * @access private
  */
 function wp_unregister_GLOBALS() {
+	/**
+      string ini_get ( string $varname ) 成功时返回配置选项的值。返回值: 
+成功是返回配置选项值的字符串，null 的值则返回空字符串。如果配置选项不存在，将会返回 FALSE。
+	*/
 	if ( !ini_get( 'register_globals' ) )
 		return;
-
+     /**
+     bool isset ( mixed $var [, mixed $... ] ) 检测变量是否设置,返回值：如果 var 存在并且值不是 NULL 则返回 TRUE，否则返回 FALSE。如果已经使用 unset() 释放了一个变量之后，它将不再是 isset()。若使用 isset() 测试一个被设置成 NULL 的变量，将返回 FALSE。同时要注意的是一个 NULL 字节（"\0"）并不等同于 PHP 的 NULL 常数
+     */
 	if ( isset( $_REQUEST['GLOBALS'] ) )
 		die( 'GLOBALS overwrite attempt detected' );
 
 	// Variables that shouldn't be unset
 	$no_unset = array( 'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_ENV', '_FILES', 'table_prefix' );
-
+     /**
+       array_merge(array1,array2,array3...) 函数把一个或多个数组合并为一个数组
+     */
+      /**
+      $_GET 通过 URL 参数传递给当前脚本的变量的数组.
+      $GLOBALS 这种全局变量用于在 PHP 脚本中的任意位置访问全局变量（从函数或方法中均可）。PHP 在名为 $GLOBALS[index] 的数组中存储了所有全局变量。变量的名字就是数组的键。
+      $_SERVER 这种超全局变量保存关于报头、路径和脚本位置的信息。
+      $_REQUEST 用于收集 HTML 表单提交的数据。
+      $_POST 广泛用于收集提交 method="post" 的 HTML 表单后的表单数据。$_POST 也常用于传递变量。
+      $_GET 也可用于收集提交 HTML 表单 (method="get") 之后的表单数据。$_GET 也可以收集 URL 中的发送的数据。
+      $_COOKIE 变量用于取回 cookie 的值
+      $_ENV 通过环境方式传递给当前脚本的变量的数组。这些变量被从 PHP 解析器的运行环境导入到 PHP的全局命名空间。很多是由支持 PHP 运行的 Shell 提供的，并且不同的系统很可能运行着不同种类的 Shell，所以不可能有一份确定的列表。请查看你的 Shell 文档来获取定义的环境变量列表。
+      $_FILES 使用 PHP 的全局数组 $_FILES，你可以从客户计算机向远程服务器上传文件
+          第一个参数是表单的 input name，第二个下标可以是 "name", "type", "size", "tmp_name" 或 	"error"。就像这样：
+			$_FILES["file"]["name"] - 被上传文件的名称
+			$_FILES["file"]["type"] - 被上传文件的类型
+			$_FILES["file"]["size"] - 被上传文件的大小，以字节计
+			$_FILES["file"]["tmp_name"] - 存储在服务器的文件的临时副本的名称
+			$_FILES["file"]["error"] - 由文件上传导致的错误代码
+			这是一种非常简单文件上传方式。基于安全方面的考虑，您应当增加有关什么用户有权上传文件的限制。
+	$_SESSION 存储和取回 session 变量的正确方法是使用 PHP $_SESSION 变量：
+      */
 	$input = array_merge( $_GET, $_POST, $_COOKIE, $_SERVER, $_ENV, $_FILES, isset( $_SESSION ) && is_array( $_SESSION ) ? $_SESSION : array() );
 	foreach ( $input as $k => $v )
 		if ( !in_array( $k, $no_unset ) && isset( $GLOBALS[$k] ) ) {
@@ -95,6 +127,10 @@ function wp_fix_server_vars() {
 	}
 
 	// Fix for PHP as CGI hosts that set SCRIPT_FILENAME to something ending in php.cgi for all requests
+	/**
+
+	 strpos() 函数查找字符串在另一字符串中第一次出现的位置
+	*/
 	if ( isset( $_SERVER['SCRIPT_FILENAME'] ) && ( strpos( $_SERVER['SCRIPT_FILENAME'], 'php.cgi' ) == strlen( $_SERVER['SCRIPT_FILENAME'] ) - 7 ) )
 		$_SERVER['SCRIPT_FILENAME'] = $_SERVER['PATH_TRANSLATED'];
 
