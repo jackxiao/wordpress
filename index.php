@@ -19,5 +19,6 @@ require( dirname( __FILE__ ) . '/wp-blog-header.php' );
 /**
 
 测试测试
+对比，修改。
 
 */
