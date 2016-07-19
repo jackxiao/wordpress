@@ -23,4 +23,6 @@ require( dirname( __FILE__ ) . '/wp-blog-header.php' );
 测试测试测试
 测试测试
 
+1888888888888
+
 */
