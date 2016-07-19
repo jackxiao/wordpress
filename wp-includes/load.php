@@ -130,6 +130,20 @@ function wp_fix_server_vars() {
 	/**
 
 	 strpos() 函数查找字符串在另一字符串中第一次出现的位置
+	 	返回值：	
+     	返回字符串在另一字符串中第一次出现的位置，如果没有找到字符串则返回 FALSE。
+		注释：字符串位置从 0 开始，不是从 1 开始。
+
+		strpos(string,find,start)
+			参数	描述
+		string	必需。规定要搜索的字符串。
+		find	必需。规定要查找的字符串。
+		start	可选。规定在何处开始搜索。
+	*/
+	/**
+
+	$_SERVER['SCRIPT_FILENAME'] 当前执行脚本的绝对路径。
+	$_SERVER['PATH_TRANSLATED']当前脚本所在文件系统（非文档根目录）的基本路径。这是在服务器进行虚拟到真实路径的映像后的结果。
 	*/
 	if ( isset( $_SERVER['SCRIPT_FILENAME'] ) && ( strpos( $_SERVER['SCRIPT_FILENAME'], 'php.cgi' ) == strlen( $_SERVER['SCRIPT_FILENAME'] ) - 7 ) )
 		$_SERVER['SCRIPT_FILENAME'] = $_SERVER['PATH_TRANSLATED'];
@@ -139,6 +153,16 @@ function wp_fix_server_vars() {
 		unset( $_SERVER['PATH_INFO'] );
 
 	// Fix empty PHP_SELF
+	/**
+	$_SERVER['PHP_SELF'] 当前执行脚本的文件名，与 document root 有关。例如，在地址为 http://example.com/test.php/foo.bar 的脚本中使用 $_SERVER['PHP_SELF'] 将得到 /test.php/foo.bar。
+	*/
+	/**
+	mixed preg_replace ( mixed $pattern , mixed $replacement , mixed $subject [, int $limit = -1 [, int &$count ]] )
+	搜索subject中匹配pattern的部分， 以replacement进行替换。
+	如果subject是一个数组， preg_replace()返回一个数组， 其他情况下返回一个字符串。
+	如果匹配被查找到，替换后的subject被返回，其他情况下 返回没有改变的 subject。如果发生错误，返回 NULL 。
+	*/
+
 	$PHP_SELF = $_SERVER['PHP_SELF'];
 	if ( empty( $PHP_SELF ) )
 		$_SERVER['PHP_SELF'] = $PHP_SELF = preg_replace( '/(\?.*)?$/', '', $_SERVER["REQUEST_URI"] );
@@ -159,6 +183,10 @@ function wp_fix_server_vars() {
 function wp_check_php_mysql_versions() {
 	global $required_php_version, $wp_version;
 	$php_version = phpversion();
+    /**
+    */
+
+
 
 	if ( version_compare( $required_php_version, $php_version, '>' ) ) {
 		wp_load_translations_early();
