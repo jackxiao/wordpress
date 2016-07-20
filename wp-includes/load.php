@@ -172,6 +172,9 @@ function wp_fix_server_vars() {
 测试测试
 */
 /**
+ ssh key 测试测试测试
+*/
+/**
  * Check for the required PHP version, and the MySQL extension or
  * a database drop-in.
  *
